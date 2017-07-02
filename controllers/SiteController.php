@@ -57,49 +57,8 @@ class SiteController extends Controller
                 'class' => 'yii\captcha\CaptchaAction',
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
             ],
-            'upload'=>[
-                'class' => 'app\widgets\file_upload\UploadAction',     //放置扩展的地址,前头要有app
-                'config' => [
-                    'imagePathFormat' => "/image/{yyyy}{mm}{dd}/{time}{rand:6}",
-                ]
-            ],
         ];
     }
-
-
-
-    public function actionUpload()
-    {
-//        $model = new UploadForm();
-//
-//        if (Yii::$app->request->isPost) {
-//                $model->file = UploadedFile::getInstance($model, 'file');
-//
-//            if ($model->file && $model->validate()) {
-//                $model->file->saveAs('/wtkuploads/' . $model->file->baseName . '.' . $model->file->extension);
-//            }
-//        }
-//
-//        return $this->render('imguploadtest', ['model' => $model]);
-
-//        $url = "/wtkuploads";
-//
-//        echo FileUpload::widget();
-//
-//        echo FileUpload::widget(['value'=>$url]);  //编辑时要带默认图，$url为图片地址
-
-
-        return $this->render('imguploadtest');
-    }
-
-
-
-
-
-
-
-
-
 
 
     /**
