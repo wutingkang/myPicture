@@ -40,12 +40,12 @@ class PicInfo extends \yii\db\ActiveRecord
     {
         return [
             [['imageFile'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg'],
-            [['name', 'path', 'url', 'time', 'm_time', 'size', 'type', 'status'], 'required'],
-            [['time', 'm_time'], 'safe'],
-            [['size'], 'number'],
-            [['type', 'status'], 'integer'],
-            [['name', 'url'], 'string', 'max' => 30],
-            [['path'], 'string', 'max' => 50],
+//            [['name', 'path', 'url', 'time', 'm_time', 'size', 'type', 'status'], 'required'],
+//            [['time', 'm_time'], 'safe'],
+//            [['size'], 'number'],
+//            [['type', 'status'], 'integer'],
+//            [['name', 'url'], 'string', 'max' => 30],
+//            [['path'], 'string', 'max' => 50],
         ];
     }
 
@@ -74,12 +74,14 @@ class PicInfo extends \yii\db\ActiveRecord
 
             //存入数据库
             Yii::$app->db->createCommand()->insert('pic_info', [
-                'name' => $this->name,
-                'path' => Yii::getAlias('@web/uploads/user/') . $this->created_by . '/' . $info['name'], //存储路径
-                'store_name' => $info['name'], //保存的名称
-                'album_id' => $this->id,
-                'created_at' => time(),
-                'created_by' => Yii::$app->user->id,
+                'name' => "say my name",
+                'path' => '/home/file/pic/' . $this->imageFile->baseName . '.' . $this->imageFile->extension, //存储路径
+                'url' => "123",
+                'time' => time(),
+                'm_time' => time(),
+                'size' => 1.0,
+                'type' => 'undefind',
+                'status' => true,
             ])->execute();
 
             return true;

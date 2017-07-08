@@ -5,9 +5,11 @@ namespace app\controllers;
 use app\models\PicInfo;
 
 use Yii;
+use yii\data\ArrayDataProvider;
 use yii\web\Controller;
 use app\models\UploadForm;
 use yii\web\UploadedFile;
+use app\models\PicType;
 
 class PhotoController extends \yii\web\Controller
 {
@@ -49,6 +51,8 @@ class PhotoController extends \yii\web\Controller
     {
         $model = new PicInfo();
 
+        $typedata = PicType::find()->asArray();
+
         if (Yii::$app->request->isPost) {
             $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
 
@@ -56,10 +60,12 @@ class PhotoController extends \yii\web\Controller
             if ($model->upload()) {
                 // 文件上传成功
                 return $this->render('index');
+            }else{
+                return $this->render('error');
             }
         }
 
-        return $this->render('upload', ['model' => $model]);
+        return $this->render('upload', ['model' => $model, 'typedata' => $typedata]);
     }
 
     public function actionEdit()
