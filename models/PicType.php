@@ -26,7 +26,8 @@ class PicType extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'id'], 'required'],
+            [['name'], 'required'],
+            ['id', 'unique'],
             [['name'], 'string', 'max' => 30],
         ];
     }
