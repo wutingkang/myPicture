@@ -41,11 +41,10 @@ class PicInfo extends \yii\db\ActiveRecord
         return [
             [['imageFile'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg'],
 //            [['name', 'path', 'url', 'time', 'm_time', 'size', 'type', 'status'], 'required'],
-//            [['time', 'm_time'], 'safe'],
+//            [['time', 'm_time'], 'safe'], //?
 //            [['size'], 'number'],
-//            [['type', 'status'], 'integer'],
-//            [['name', 'url'], 'string', 'max' => 30],
-//            [['path'], 'string', 'max' => 50],
+//            [['type', 'status'], 'boolean'],
+//            [['name', 'url', 'path'], 'string', 'max' => 255],
         ];
     }
 
@@ -68,27 +67,55 @@ class PicInfo extends \yii\db\ActiveRecord
     }
 
     public function upload()
-    {
-        if ($this->validate()) {
-            $this->imageFile->saveAs('/home/file/pic/' . $this->imageFile->baseName . '.' . $this->imageFile->extension);
+    {//echo isset($_POST['type']) ? $_POST['type'] : "fuck";die; $model->load(Yii::$app->request->post())
+//echo var_dump(Yii::$app->request->post('type'));die;
+        if ($this->validate()) { 
 
-            //存入数据库
-            Yii::$app->db->createCommand()->insert('pic_info', [
-                'name' => "say my name",
-                'path' => '/home/file/pic/' . $this->imageFile->baseName . '.' . $this->imageFile->extension, //存储路径
-                'url' => "123",
-                'time' => time(),
-                'm_time' => time(),
-                'size' => 1.0,
-                'type' => 'undefind',
+		  $path = $this->getPath();
+		  $saveName = date("YmdHis") . '_' . rand(100, 999) . '.' . $this->imageFile->extension;
+        	  $this->imageFile->saveAs($path . $saveName);
+	   
+	   
+           //存入数据库,可以考虑加入事务，先存入数据库成功后再上传文件
+		   $this->name = $this->imageFile->baseName;
+			$this->path = $path;
+			$this->url = dirname(Yii::$app->homeUrl).'photo/view/' . $saveName; //dirname(Yii::$app->homeUrl) ?
+			$this->time = date("Ymd");
+			$this->m_time = date("Ymd");
+			$this->size = $this->imageFile->size;
+			$this->type = Yii::$app->request->post('type', '0');
+			$this->status = true;
+
+			$this->save(false); //			
+
+            /*Yii::$app->db->createCommand()->insert('pic_info', [
+                'name' => $this->imageFile->baseName,
+                'path' => $path,
+                'url' => dirname(Yii::$app->homeUrl).'photo/view/' . $saveName, //dirname(Yii::$app->homeUrl) ?
+                'time' => date("Ymd"),
+                'm_time' => date("Ymd"),
+                'size' => $this->imageFile->size,
+                'type' => Yii::$app->request->post('type', '0'), //等同于: $type = isset($_POST['type']) ? $_POST['type'] : 0; 
                 'status' => true,
-            ])->execute();
+            ])->execute();*/
 
             return true;
         } else {
             return false;
         }
     }
+
+	public function getPath(){
+		$path = '/usr/see/continue/tmp/file/pic/' . $this->type . '/' . date("Ym") . '/'; //edit the path in company
+
+		if (!file_exists($path)){   //判断该目录是否存在  
+      		if (false == mkdir($path, 0777, true)){ //第三个参数
+				die('make file save path :' . $path . 'fail!');
+			}
+        }
+		
+		return $path;
+	}
 
     public static function uploadPhoto($name)
     {

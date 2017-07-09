@@ -50,22 +50,20 @@ class PhotoController extends \yii\web\Controller
     public function actionUpload()
     {
         $model = new PicInfo();
-
-        $typedata = PicType::find()->asArray();
+	  
+        $typeData = PicType::find()->all(); //数目太多呢？
 
         if (Yii::$app->request->isPost) {
             $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
 
-
-            if ($model->upload()) {
-                // 文件上传成功
+            if ($model->upload()) {// 文件上传成功
                 return $this->render('index');
             }else{
                 return $this->render('error');
             }
         }
 
-        return $this->render('upload', ['model' => $model, 'typedata' => $typedata]);
+        return $this->render('upload', ['model' => $model, 'typeData' => $typeData]);
     }
 
     public function actionEdit()

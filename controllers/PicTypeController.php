@@ -35,7 +35,7 @@ class PicTypeController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new PicTypeSearch();
+        $searchModel = new PicTypeSearch(); //findAll("id != :defaultId", array(":defaultId" => 0));
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [

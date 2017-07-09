@@ -1,8 +1,6 @@
 <?php
 /* @var $this yii\web\View */
 
-//可以考虑加别名 /home/file/pic/
-
 use yii\widgets\ActiveForm;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
@@ -12,8 +10,8 @@ use yii\helpers\ArrayHelper;
 
     <?= $form->field($model, 'imageFile')->fileInput() ?>
 
-    <?= $form->field($model, 'type')->dropDownList(ArrayHelper::map($typedata,'id', 'name')) ?>
+    <?= $form->field($model, 'type')->dropDownList(ArrayHelper::map($typeData,'id', 'name')) ?>
 
-    <p><?= Html::submitButton('Upload', ['btn btn-primary']) ?></p>
+    <p><?= Html::submitButton('Upload', ['class' => 'btn btn-primary']) ?></p>
 
 <?php ActiveForm::end() ?>
