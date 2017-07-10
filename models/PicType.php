@@ -12,12 +12,15 @@ use Yii;
  */
 class PicType extends \yii\db\ActiveRecord
 {
+    //每种图片类型对应图片数目的数组
+    private $_numOfPic;
+
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'pic_type';
+        return '{{%type}}';
     }
 
     /**
@@ -27,8 +30,8 @@ class PicType extends \yii\db\ActiveRecord
     {
         return [
             [['name'], 'required'],
-            ['id', 'unique'],
-            [['name'], 'string', 'max' => 30],
+            [['id', 'name'], 'unique'],
+            [['name'], 'string', 'max' => 255],
         ];
     }
 
@@ -39,7 +42,24 @@ class PicType extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
+            'name' => '类型名称',
         ];
+    }
+
+    //return 每种图片类型对应图片数目的数组
+    public function getNumOfPic(){
+
+        if (!isset($this->_numOfPic)){
+
+            $this->_numOfPic = array();
+
+            $rows = Yii::$app->db->createCommand('SELECT type , count(type) FROM pic_info GROUP by type')->query();
+
+            foreach($rows as $index => $typeAndNum){
+                $this->_numOfPic[$typeAndNum['type']] = $typeAndNum['count(type)'];
+            }
+        }
+
+        return $this->_numOfPic;
     }
 }

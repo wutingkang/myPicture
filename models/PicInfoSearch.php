@@ -5,12 +5,12 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\PicType;
+use app\models\PicInfo;
 
 /**
- * PicTypeSearch represents the model behind the search form about `app\models\PicType`.
+ * PicInfoSearch represents the model behind the search form about `app\models\PicInfo`.
  */
-class PicTypeSearch extends PicType
+class PicInfoSearch extends PicInfo
 {
     /**
      * @inheritdoc
@@ -18,8 +18,8 @@ class PicTypeSearch extends PicType
     public function rules()
     {
         return [
-            [['id'], 'integer'],
-            [['name'], 'safe'],
+            [['id', 'size', 'type', 'status'], 'integer'],
+            [['name', 'path', 'url', 'time', 'm_time'], 'safe'],
         ];
     }
 
@@ -41,17 +41,12 @@ class PicTypeSearch extends PicType
      */
     public function search($params)
     {
-        $query = PicType::find();
+        $query = PicInfo::find();
 
         // add conditions that should always apply here
 
-        $query->having("id != :defaultId", array(":defaultId" => 0)); //隐藏默认分类，防止被用户编辑
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'pagination'=>[
-                'pagesize'=>8
-            ]
         ]);
 
         $this->load($params);
@@ -65,9 +60,16 @@ class PicTypeSearch extends PicType
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
+            'time' => $this->time,
+            'm_time' => $this->m_time,
+            'size' => $this->size,
+            'type' => $this->type,
+            'status' => $this->status,
         ]);
 
-        $query->andFilterWhere(['like', 'name', $this->name]);
+        $query->andFilterWhere(['like', 'name', $this->name])
+            ->andFilterWhere(['like', 'path', $this->path])
+            ->andFilterWhere(['like', 'url', $this->url]);
 
         return $dataProvider;
     }

@@ -13,35 +13,6 @@ use app\models\PicType;
 
 class PhotoController extends \yii\web\Controller
 {
-//    public function actionUpload()
-//    {
-//        $model=new PicInfo();
-//
-//        if($model->load(Yii::$app->request->post()) && $model->validate()){
-//
-//            $model->url = "";
-//            $model->m_time = "";
-//            $model->name = "";
-//            $model->path = "";
-//            $model->size = "";
-//            $model->status = true;
-//            $model->time = "";
-//            $model->type = "";
-//            $model->
-//
-//            if($model->save()){
-//
-//                PicInfo::uploadPhoto("");
-//
-//                return $this->redirect(['site\index']);
-//            }
-//        }
-//
-//        return $this->render('upload',[
-//            'model'=>$model,
-//        ]);
-//    }
-
     public function actionIndex()
     {
         return $this->render('index');

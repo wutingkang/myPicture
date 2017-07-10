@@ -2,18 +2,17 @@
 
 namespace app\controllers;
 
-use app\models\PicInfo;
 use Yii;
-use app\models\PicType;
-use app\models\PicTypeSearch;
+use app\models\PicInfo;
+use app\models\PicInfoSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * PicTypeController implements the CRUD actions for PicType model.
+ * PicInfoController implements the CRUD actions for PicInfo model.
  */
-class PicTypeController extends Controller
+class PicInfoController extends Controller
 {
     /**
      * @inheritdoc
@@ -30,13 +29,32 @@ class PicTypeController extends Controller
         ];
     }
 
+    public function actionUpload()
+    {
+        $model = new PicInfo();
+
+        $typeData = PicType::find()->all(); //数目太多呢？
+
+        if (Yii::$app->request->isPost) {
+            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+
+            if ($model->upload()) {// 文件上传成功
+                return $this->render('index');
+            }else{
+                return $this->render('error');
+            }
+        }
+
+        return $this->render('upload', ['model' => $model, 'typeData' => $typeData]);
+    }
+
     /**
-     * Lists all PicType models.
+     * Lists all PicInfo models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new PicTypeSearch();
+        $searchModel = new PicInfoSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -46,7 +64,7 @@ class PicTypeController extends Controller
     }
 
     /**
-     * Displays a single PicType model.
+     * Displays a single PicInfo model.
      * @param integer $id
      * @return mixed
      */
@@ -58,16 +76,13 @@ class PicTypeController extends Controller
     }
 
     /**
-     * Creates a new PicType model.
+     * Creates a new PicInfo model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new PicType();
-
-        //auto add id
-
+        $model = new PicInfo();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -79,12 +94,12 @@ class PicTypeController extends Controller
     }
 
     /**
-     * Updates an existing PicType model.
+     * Updates an existing PicInfo model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
      */
-    public function actionUpdate($id) //类型名称修改之后对应图片的类型名称也对应修改
+    public function actionUpdate($id)
     {
         $model = $this->findModel($id);
 
@@ -98,34 +113,28 @@ class PicTypeController extends Controller
     }
 
     /**
-     * Deletes an existing PicType model.
+     * Deletes an existing PicInfo model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id) //如果该类型下存在已上传的图片，则提示不能删除
+    public function actionDelete($id)
     {
-        if (0 == PicInfo::find()->where(['type' => $id])->count()){
-            $this->findModel($id)->delete();
+        $this->findModel($id)->delete();
 
-            return $this->redirect(['index']);
-        }else{
-            //Yii::$app->getSession()->setFlash('error', '已存在');
-            return $this->redirect(['index']);
-            //return $this->redirect(['deleteFail']);
-        }
+        return $this->redirect(['index']);
     }
 
     /**
-     * Finds the PicType model based on its primary key value.
+     * Finds the PicInfo model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return PicType the loaded model
+     * @return PicInfo the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = PicType::findOne($id)) !== null) {
+        if (($model = PicInfo::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
