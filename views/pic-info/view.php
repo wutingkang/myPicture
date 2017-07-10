@@ -28,15 +28,20 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
-            'name',
-            'path',
-            'url:url',
-            'time',
-            'm_time',
-            'size',
-            'type',
-            'status',
+
+            'url'=>[
+                'label' => '图片',
+                'format' => [
+                    'image',
+                    [
+                        'height' => 500,
+                        'width' => 700
+                    ]
+                ],
+                'value' => function($model){
+                    return $model->url;
+                }
+            ],
         ],
     ]) ?>
 

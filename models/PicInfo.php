@@ -5,6 +5,7 @@ namespace app\models;
 use Yii;
 use yii\web\UploadedFile;
 
+
 /**
  * This is the model class for table "pic_info".
  *
@@ -79,7 +80,7 @@ class PicInfo extends \yii\db\ActiveRecord
             //存入数据库,可以考虑加入事务，先存入数据库成功后再上传文件
 		    $this->name = $this->imageFile->baseName;
 			$this->path = $path;
-			$this->url = dirname(Yii::$app->homeUrl).'photo/view/' . $saveName;
+			$this->url = 'www.storemypicture.com' . '/' . $this->type . '/' . date("Ym") . '/' . $saveName; //dirname(Yii::$app->homeUrl) = / ?
 			$this->time = date("Ymd");
 			$this->m_time = date("Ymd");
 			$this->size = $this->imageFile->size;
@@ -113,14 +114,13 @@ class PicInfo extends \yii\db\ActiveRecord
 		$path = '/home/file/pic/' . $this->type . '/' . date("Ym") . '/'; //edit the path in company
 
 		if (!file_exists($path)){   //判断该目录是否存在  
-      		if (false == mkdir($path, 0777, true)){ //第三个参数
+      		if (false == mkdir($path, 0777, true)){ //第三个参数 ture
 				die('make file save path :' . $path . 'fail!');
 			}
         }
 		
 		return $path;
 	}
-
 
     public static function uploadPhoto($name)
     {

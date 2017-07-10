@@ -8,6 +8,8 @@ use app\models\PicInfoSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use app\models\PicType;
+use yii\web\UploadedFile;
 
 /**
  * PicInfoController implements the CRUD actions for PicInfo model.
@@ -39,7 +41,9 @@ class PicInfoController extends Controller
             $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
 
             if ($model->upload()) {// 文件上传成功
-                return $this->render('index');
+
+
+                return $this->actionIndex();
             }else{
                 return $this->render('error');
             }

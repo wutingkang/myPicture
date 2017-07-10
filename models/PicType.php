@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "pic_type".
@@ -61,5 +62,26 @@ class PicType extends \yii\db\ActiveRecord
         }
 
         return $this->_numOfPic;
+    }
+
+    /**
+     * 将栏目组合成key-value形式
+     */
+    public static  function  get_type(){
+        $cat = PicType::find()->all();
+        $cat = ArrayHelper::map($cat, 'id', 'name');
+        return $cat;
+    }
+
+    /**
+     * 通过栏目id获得栏目名称
+     * @param unknown $id
+     * @return
+     */
+
+    public static  function  get_type_text($id){
+        $datas = PicType::find()->all();
+        $datas = ArrayHelper::map($datas, 'id', 'name');
+        return  $datas[$id];
     }
 }

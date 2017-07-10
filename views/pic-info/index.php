@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use \app\models\PicType;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\PicInfoSearch */
@@ -16,25 +17,53 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Pic Info', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('上传图片', ['upload'], ['class' => 'btn btn-success']) ?>
     </p>
-    <?= GridView::widget([
+    <?=
+//    var_dump( $model->url);die;
+ //   $str = 'www.storemypicture.com/2/201707/20170710141823_582.jpg';
+
+    GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+
+
+           'url'=> [
+                'label' => '图片',
+                'format' => [
+                    'image',
+                    [
+                        'height' => 500,
+                        'width' => 700
+                    ]
+                ],
+                'value' =>
+                    //function($model) {return $model->url;}
+                    function($model){
+
+                    var_dump( $model);die;
+                        return 'www.storemypicture.com/2/201707/20170710141823_582.jpg';
+
+                  //  return $model->url;
+                }
+            ],
+
             'name',
-            'path',
-            'url:url',
-            'time',
-            // 'm_time',
-            // 'size',
-            // 'type',
-            // 'status',
+
+            [
+                'attribute' => 'type',
+                'label' => '图片类型',
+                'value' => function($model) {
+                    return  PicType::get_type_text($model->type);
+                },
+                'filter' => PicType::get_type(),
+            ],
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
+        'emptyText'=>'当前没有图片',
+        'emptyTextOptions'=>['style'=>'color:red;font-weight:bold'],
     ]); ?>
 </div>

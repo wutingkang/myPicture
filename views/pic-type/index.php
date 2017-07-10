@@ -50,7 +50,12 @@ $this->params['breadcrumbs'][] = $this->title;
                         if (array_key_exists($model->id, $model->numOfPic)){ //如何设置弹窗警告? from controller or view ,,,
                             //return Html::a('cannot delete', '', ['title' => 'delete', 'target' => '_blank', 'data-method' => 'post']);
                         }else{
-                            return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, ['title' => 'delete', 'target' => '_blank', 'data-method' => 'post']); //'data-method' => 'post' must add
+                            return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, ['title' => 'delete', 'target' => '_blank', 'class' => 'btn btn-danger',
+                                'data' => [
+                                    'confirm' => 'Are you sure you want to delete this item?',
+                                    'method' => 'post',
+                                ]
+                            ]);
                         }
 
 
