@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use \app\models\PicType;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\PicInfo */
@@ -25,6 +26,14 @@ $this->params['breadcrumbs'][] = $this->title;
         ]) ?>
     </p>
 
+<!--    <p> --><?//=  Html::img($model->url,
+//        [//'class' => 'img-circle',
+//            'width' => 600,
+//            'height' => 400
+//        ]
+//    ); ?><!-- </p>-->
+
+
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
@@ -34,13 +43,22 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => [
                     'image',
                     [
-                        'height' => 500,
-                        'width' => 700
+                        'height' => 300,
+                        'width' => 500
                     ]
                 ],
                 'value' => function($model){
                     return $model->url;
                 }
+            ],
+
+            'name',
+            'type'=>[
+                'attribute' => 'type',
+                'label' => '图片类型',
+                'value' => function($model) {
+                    return  PicType::get_type_text($model->type);
+                },
             ],
         ],
     ]) ?>

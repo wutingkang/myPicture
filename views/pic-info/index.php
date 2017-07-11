@@ -14,20 +14,15 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="pic-info-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
         <?= Html::a('上传图片', ['upload'], ['class' => 'btn btn-success']) ?>
     </p>
-    <?=
-//    var_dump( $model->url);die;
- //   $str = 'www.storemypicture.com/2/201707/20170710141823_582.jpg';
 
-    GridView::widget([
+    <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-
 
 
            'url'=> [
@@ -35,18 +30,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => [
                     'image',
                     [
-                        'height' => 500,
-                        'width' => 700
+                        'width'=>'120',
+                        'height'=>'80'
                     ]
                 ],
-                'value' =>
-                    //function($model) {return $model->url;}
-                    function($model){
-
-                    var_dump( $model);die;
-                        return 'www.storemypicture.com/2/201707/20170710141823_582.jpg';
-
-                  //  return $model->url;
+                'value' => function($model){
+                    return $model->url;
                 }
             ],
 

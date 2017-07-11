@@ -49,8 +49,8 @@ class PicTypeSearch extends PicType
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'pagination'=>[
-                'pagesize'=>8
+            'pagination' => [
+                'pagesize' => 8
             ]
         ]);
 

@@ -31,9 +31,15 @@ class PicInfoController extends Controller
         ];
     }
 
+    /**
+     * Upload a new PicInfo model.
+     * If upload is successful, the browser will be redirected to the 'index' page.
+     * @return mixed
+     */
     public function actionUpload()
     {
         $model = new PicInfo();
+        $model->setScenario('upload');
 
         $typeData = PicType::find()->all(); //数目太多呢？
 
@@ -80,24 +86,6 @@ class PicInfoController extends Controller
     }
 
     /**
-     * Creates a new PicInfo model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionCreate()
-    {
-        $model = new PicInfo();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
-        }
-    }
-
-    /**
      * Updates an existing PicInfo model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
@@ -106,12 +94,22 @@ class PicInfoController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $model->setScenario('update');
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if (Yii::$app->request->isPost) {
+
+            if ($model->updatePic()){
+                return $this->redirect(['view', 'id' => $model->id]);
+            }else{
+                return $this->render('error');
+            }
+
         } else {
+            $typeData = PicType::find()->all(); //数目太多呢？
+
             return $this->render('update', [
                 'model' => $model,
+                'typeData' => $typeData,
             ]);
         }
     }
@@ -124,7 +122,9 @@ class PicInfoController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        //$this->findModel($id)->delete();
+
+        $this->findModel($id)->deletePic($id);
 
         return $this->redirect(['index']);
     }

@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
@@ -13,7 +14,6 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="pic-type-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
         <?= Html::a('Create Pic Type', ['create'], ['class' => 'btn btn-success']) ?>
@@ -48,9 +48,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         $url = "/index.php?r=pic-type/delete&id=" . $model->id;
 
                         if (array_key_exists($model->id, $model->numOfPic)){ //如何设置弹窗警告? from controller or view ,,,
-                            //return Html::a('cannot delete', '', ['title' => 'delete', 'target' => '_blank', 'data-method' => 'post']);
+                            return Html::a('<span class="glyphicon glyphicon-trash"></span>',  '/index.php?r=pic-type/index', ['title' => 'delete', 'target' => '_blank',
+                                'data' => [
+                                'confirm' => '该类型下存在已上传的图片，不能删除!',
+                                'method' => 'post',
+                            ]]);
                         }else{
-                            return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, ['title' => 'delete', 'target' => '_blank', 'class' => 'btn btn-danger',
+                            return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, ['title' => 'delete', 'target' => '_blank', //'class' => 'btn btn-danger',
                                 'data' => [
                                     'confirm' => 'Are you sure you want to delete this item?',
                                     'method' => 'post',

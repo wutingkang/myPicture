@@ -41,12 +41,15 @@ class PicInfoSearch extends PicInfo
      */
     public function search($params)
     {
-        $query = PicInfo::find();
+        $query = PicInfo::find()->where("status != :deleteStatus", [":deleteStatus" => false]); //只显示未删除的图片
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination'=>[
+                'pagesize'=> 3
+            ]
         ]);
 
         $this->load($params);
