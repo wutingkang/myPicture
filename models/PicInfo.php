@@ -3,7 +3,7 @@
 namespace app\models;
 
 use Yii;
-use yii\web\UploadedFile;
+use app\models\Image;
 
 
 /**
@@ -33,6 +33,8 @@ class PicInfo extends \yii\db\ActiveRecord
      * @var save picture file
      */
     public $imageFile;
+    public $wight;
+    public $height;
 
     /**
      * @inheritdoc
@@ -42,6 +44,9 @@ class PicInfo extends \yii\db\ActiveRecord
         return [
             [['imageFile'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg', 'maxSize' => 1024*1000, 'message' => '您上传的文件过大', 'on' => ['upload']],
             [['name'], 'string', 'max' => 255, 'on' => ['update']],
+            [['wight', 'height'], 'integer', 'on' => ['upload']],
+            ['wight', 'integer', 'min' => 400, 'max' => 1600, 'integerOnly'=>true, 'on' => ['upload']],
+            ['height', 'integer', 'min'=> 225, 'max'=>900, 'integerOnly'=>true, 'on' => ['upload']],
         ];
     }
 
@@ -66,7 +71,7 @@ class PicInfo extends \yii\db\ActiveRecord
     public function scenarios()
     {
         return [
-            'upload' => ['imageFile'],
+            'upload' => ['imageFile', 'wight', 'height'],
             'update' => ['name'],
         ];
     }
@@ -74,6 +79,8 @@ class PicInfo extends \yii\db\ActiveRecord
     public function upload()
     {
         if ($this->validate()) {
+
+
 
             $this->type = Yii::$app->request->post('PicInfo')['type']; //获取路径需要用到type
             $Dir = $this->getDir();
@@ -94,6 +101,14 @@ class PicInfo extends \yii\db\ActiveRecord
 
             $this->imageFile->saveAs($this->path);
 
+
+            //使用demo
+            $_img = new Image($this->path);
+
+            //$_img->makethumb($this->path, $Dir, 300, 300, 1);
+
+            $_img->thumb(500, 500);
+            $_img->out();
 
 //            Yii::$app->db->createCommand()->insert('pic_info', [
 //                'name' => $this->imageFile->baseName,

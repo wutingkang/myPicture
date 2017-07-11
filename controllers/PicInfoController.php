@@ -41,7 +41,7 @@ class PicInfoController extends Controller
         $model = new PicInfo();
         $model->setScenario('upload');
 
-        $typeData = PicType::find()->all(); //数目太多呢？
+        $typeData = PicType::find()->all();
 
         if (Yii::$app->request->isPost) {
             $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
@@ -104,7 +104,7 @@ class PicInfoController extends Controller
             }
 
         } else {
-            $typeData = PicType::find()->all(); //数目太多呢？
+            $typeData = PicType::find()->all();
 
             return $this->render('update', [
                 'model' => $model,
