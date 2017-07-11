@@ -48,10 +48,9 @@ class PicInfoController extends Controller
 
             if ($model->upload()) {// 文件上传成功
 
-
                 return $this->actionIndex();
             }else{
-                return $this->render('error');
+                echo "file error";
             }
         }
 
@@ -101,7 +100,7 @@ class PicInfoController extends Controller
             if ($model->updatePic()){
                 return $this->redirect(['view', 'id' => $model->id]);
             }else{
-                return $this->render('error');
+                echo "name error";
             }
 
         } else {

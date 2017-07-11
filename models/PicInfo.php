@@ -83,8 +83,8 @@ class PicInfo extends \yii\db\ActiveRecord
 		    $this->name = $this->imageFile->baseName;
 			$this->path = $Dir . $saveName;
 			$this->url = 'http://www.storemypicture.com' . '/' . $this->type . '/' . date("Ym") . '/' . $saveName;
-			$this->time = date("Ymd");
-			$this->m_time = date("Ymd");
+			$this->time = time();
+			$this->m_time = $this->time;
 			$this->size = $this->imageFile->size;
 			//$this->type = //上面已经赋值
 			$this->status = true;
@@ -98,7 +98,7 @@ class PicInfo extends \yii\db\ActiveRecord
 //            Yii::$app->db->createCommand()->insert('pic_info', [
 //                'name' => $this->imageFile->baseName,
 //                'path' => $path,
-//                'url' => dirname(Yii::$app->homeUrl).'photo/view/' . $saveName, //dirname(Yii::$app->homeUrl) ?
+//                'url' => dirname(Yii::$app->homeUrl).'photo/view/' . $saveName,
 //                'time' => date("Ymd"),
 //                'm_time' => date("Ymd"),
 //                'size' => $this->imageFile->size,
@@ -127,8 +127,7 @@ class PicInfo extends \yii\db\ActiveRecord
 
 	public function updatePic()
     {
-        if (true) {
-
+        if ($this->validate()){
             $oldType = $this->type;
             $newType = Yii::$app->request->post('PicInfo')['type'];
 
@@ -147,7 +146,10 @@ class PicInfo extends \yii\db\ActiveRecord
                 $this->getDir();
 
                 $newPath = '/home/file/pic/' . $newType . '/' . $tmpArray[1];
-                rename($this->path, $newPath);
+
+                if (false == rename($this->path, $newPath)){
+                    return false;
+                }
 
                 $this->path = $newPath;
             }
@@ -161,10 +163,10 @@ class PicInfo extends \yii\db\ActiveRecord
 //                array(':id'=>$id)
 //            )->execute();
 
-            $this->m_time = date("Ymd");
+            $this->m_time = time();
             $this->name = Yii::$app->request->post('PicInfo')['name'];
 
-            $this->save(); //check the $this->name,
+            $this->save(false);
 
             return true;
         }else{

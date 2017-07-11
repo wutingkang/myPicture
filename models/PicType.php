@@ -54,7 +54,7 @@ class PicType extends \yii\db\ActiveRecord
 
             $this->_numOfPic = array();
 
-            $rows = Yii::$app->db->createCommand('SELECT type , count(type) FROM pic_info GROUP by type')->query();
+            $rows = Yii::$app->db->createCommand('SELECT type , count(type) FROM pic_info WHERE status = 1 GROUP by type')->query();
 
             foreach($rows as $index => $typeAndNum){
                 $this->_numOfPic[$typeAndNum['type']] = $typeAndNum['count(type)'];

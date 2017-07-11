@@ -47,14 +47,14 @@ $this->params['breadcrumbs'][] = $this->title;
                     'delete' => function ($url, $model) {
                         $url = "/index.php?r=pic-type/delete&id=" . $model->id;
 
-                        if (array_key_exists($model->id, $model->numOfPic)){ //如何设置弹窗警告? from controller or view ,,,
-                            return Html::a('<span class="glyphicon glyphicon-trash"></span>',  '/index.php?r=pic-type/index', ['title' => 'delete', 'target' => '_blank',
+                        if (array_key_exists($model->id, $model->numOfPic)){ //如何只设置一个按钮?
+                            return Html::a('<span class="glyphicon glyphicon-trash"></span>',  '/index.php?r=pic-type/index', ['title' => 'delete', //'target' => '_self',
                                 'data' => [
                                 'confirm' => '该类型下存在已上传的图片，不能删除!',
                                 'method' => 'post',
                             ]]);
                         }else{
-                            return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, ['title' => 'delete', 'target' => '_blank', //'class' => 'btn btn-danger',
+                            return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, ['title' => 'delete', 'target' => '_self', //'class' => 'btn btn-danger',
                                 'data' => [
                                     'confirm' => 'Are you sure you want to delete this item?',
                                     'method' => 'post',

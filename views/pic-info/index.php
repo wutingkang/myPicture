@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('上传图片', ['upload'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('上传图片', ['/pic-info/upload'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -50,7 +50,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter' => PicType::get_type(),
             ],
 
-            ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'yii\grid\ActionColumn'], //有个问题：如果是从site控制器打开图片列表，则 view，update，delete三个按钮的动作的默认控制器都是site，这样会出错。
         ],
         'emptyText'=>'当前没有图片',
         'emptyTextOptions'=>['style'=>'color:red;font-weight:bold'],
