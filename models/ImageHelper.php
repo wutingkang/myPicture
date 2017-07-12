@@ -22,6 +22,13 @@ class ImageHelper
     public function __construct($_file)
     {
         $this->file = $_file;
+        //判断文件是否存在
+        if (file_exists($this->file)){
+            list($this->width, $this->height, $this->type) = getimagesize($this->file);
+            $this->img = $this->getFromImg($this->file, $this->type);
+        }else{
+            die('文件是不存在');
+        }
     }
 
     //加载图片，各种类型，返回图片的资源句柄
@@ -59,14 +66,6 @@ class ImageHelper
     */
     function resize($dstDir, $newWidth = 800, $newHeight = 450)
     {
-        //判断文件是否存在
-        if (file_exists($this->file)){
-            list($this->width, $this->height, $this->type) = getimagesize($this->file);
-            $this->img = $this->getFromImg($this->file, $this->type);
-        }else{
-            return false;
-        }
-
         //判断该目录是否存在,不存在则创建
         if (!file_exists($dstDir)) {
             if (false == mkdir($dstDir, 0777, true)) { //第三个参数 ture
@@ -127,7 +126,7 @@ class ImageHelper
 
         curl_setopt($ch,CURLOPT_URL,$uploadUrl);
         curl_setopt($ch,CURLOPT_RETURNTRANSFER,true); //把CRUL获取的内容赋值到变量,设为TRUE把curl_exec()结果转化为字串，而不是直接输出
-        curl_setopt($ch,CURLOPT_POST,true); ////启用POST提交
+        curl_setopt($ch,CURLOPT_POST,true); //启用POST提交
 
         //加@符号curl就会把它当成是文件上传处理
         $data = array("level" => 1,
@@ -136,9 +135,9 @@ class ImageHelper
 
         curl_setopt($ch, CURLOPT_HEADER, false);
         curl_setopt($ch, CURLOPT_SAFE_UPLOAD, false);
-        curl_setopt($ch,CURLOPT_POSTFIELDS,$data); //set in last!
+        curl_setopt($ch,CURLOPT_POSTFIELDS,$data); //set in last!!!
 
-        //curl_setopt($ch, CURLOPT_INFILESIZE,filesize($filePath)); //这句非常重要，告诉远程服务器，文件大小
+        //curl_setopt($ch, CURLOPT_INFILESIZE,filesize($filePath)); //告诉远程服务器，文件大小
         //curl_setopt($ch, CURLOPT_HEADER, 0);   // 设置是否显示header信息 0是不显示，1是显示  默认为0
         //curl_setopt($ch, CURLOPT_REFERER, $Ref_url);       //伪装REFERER
 

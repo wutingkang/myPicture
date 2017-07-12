@@ -49,10 +49,11 @@ class PicInfoController extends Controller
             $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
 
             if ($model->upload()) {// 文件上传成功
+                return $this->redirect(['view', 'id' => $model->id]);
 
-                return $this->actionIndex();
+                //return $this->actionIndex(); //会导致action是基于upload的，view的按钮url会出错
             }else{
-                echo "file error";
+                die("upload file error");
             }
         }
 

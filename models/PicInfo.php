@@ -3,7 +3,6 @@
 namespace app\models;
 
 use Yii;
-use app\models\ImageHelper;
 
 
 /**
@@ -46,8 +45,8 @@ class PicInfo extends \yii\db\ActiveRecord
             [['name'], 'string', 'max' => 255, 'on' => ['update']],
             [['dstWight', 'dstHeight'], 'integer', 'on' => ['upload']],
 
-//            ['dstWight', 'default', 'value' => 800, 'on' => ['upload']], //当不在view中使用$dstWight时default才其作用
-//            ['dstHeight', 'default', 'value' => 450, 'on' => ['upload']],
+            ['dstWight', 'default', 'value' => 800, 'on' => ['upload']], //当不在view中使用$dstWight时default才其作用
+            ['dstHeight', 'default', 'value' => 450, 'on' => ['upload']],
 
             ['dstWight', 'integer', 'min' => 400, 'max' => 1600, 'integerOnly'=>true, 'on' => ['upload']],
             ['dstHeight', 'integer', 'min'=> 225, 'max'=>900, 'integerOnly'=>true, 'on' => ['upload']],
@@ -104,6 +103,8 @@ class PicInfo extends \yii\db\ActiveRecord
             $this->imageFile->saveAs($this->path);
 
 
+
+
             if ('' == Yii::$app->request->post('PicInfo')['dstWight']){ //不填写view中的form，返回‘’，使用isset返回true
                 $this->dstWight = 800;
             }else{
@@ -116,6 +117,7 @@ class PicInfo extends \yii\db\ActiveRecord
                 $this->dstHeight = Yii::$app->request->post('PicInfo')['dstHeight'];
             }
 
+
             $img = new ImageHelper($this->path);
 
             //裁剪图片
@@ -123,8 +125,6 @@ class PicInfo extends \yii\db\ActiveRecord
 
             //上传图片
             $img->uploadToRemoteFileServer($this->path, 'http://upload.ivideohome.com:8080/upload/upload', $this->id);
-
-
 
 //            Yii::$app->db->createCommand()->insert('pic_info', [
 //                'name' => $this->imageFile->baseName,
