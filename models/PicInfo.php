@@ -3,7 +3,7 @@
 namespace app\models;
 
 use Yii;
-use app\models\Image;
+use app\models\ImageHelper;
 
 
 /**
@@ -33,8 +33,8 @@ class PicInfo extends \yii\db\ActiveRecord
      * @var save picture file
      */
     public $imageFile;
-    public $wight;
-    public $height;
+    public $dstWight;
+    public $dstHeight;
 
     /**
      * @inheritdoc
@@ -44,9 +44,13 @@ class PicInfo extends \yii\db\ActiveRecord
         return [
             [['imageFile'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg', 'maxSize' => 1024*1000, 'message' => '您上传的文件过大', 'on' => ['upload']],
             [['name'], 'string', 'max' => 255, 'on' => ['update']],
-            [['wight', 'height'], 'integer', 'on' => ['upload']],
-            ['wight', 'integer', 'min' => 400, 'max' => 1600, 'integerOnly'=>true, 'on' => ['upload']],
-            ['height', 'integer', 'min'=> 225, 'max'=>900, 'integerOnly'=>true, 'on' => ['upload']],
+            [['dstWight', 'dstHeight'], 'integer', 'on' => ['upload']],
+
+//            ['dstWight', 'default', 'value' => 800, 'on' => ['upload']], //当不在view中使用$dstWight时default才其作用
+//            ['dstHeight', 'default', 'value' => 450, 'on' => ['upload']],
+
+            ['dstWight', 'integer', 'min' => 400, 'max' => 1600, 'integerOnly'=>true, 'on' => ['upload']],
+            ['dstHeight', 'integer', 'min'=> 225, 'max'=>900, 'integerOnly'=>true, 'on' => ['upload']],
         ];
     }
 
@@ -71,7 +75,7 @@ class PicInfo extends \yii\db\ActiveRecord
     public function scenarios()
     {
         return [
-            'upload' => ['imageFile', 'wight', 'height'],
+            'upload' => ['imageFile', 'dstWight', 'dstHeight'],
             'update' => ['name'],
         ];
     }
@@ -79,8 +83,6 @@ class PicInfo extends \yii\db\ActiveRecord
     public function upload()
     {
         if ($this->validate()) {
-
-
 
             $this->type = Yii::$app->request->post('PicInfo')['type']; //获取路径需要用到type
             $Dir = $this->getDir();
@@ -102,13 +104,27 @@ class PicInfo extends \yii\db\ActiveRecord
             $this->imageFile->saveAs($this->path);
 
 
-            //使用demo
-            $_img = new Image($this->path);
+            if ('' == Yii::$app->request->post('PicInfo')['dstWight']){ //不填写view中的form，返回‘’，使用isset返回true
+                $this->dstWight = 800;
+            }else{
+                $this->dstWight = Yii::$app->request->post('PicInfo')['dstWight'];
+            }
 
-            //$_img->makethumb($this->path, $Dir, 300, 300, 1);
+            if ('' == Yii::$app->request->post('PicInfo')['dstHeight']){
+                $this->dstHeight = 450;
+            }else{
+                $this->dstHeight = Yii::$app->request->post('PicInfo')['dstHeight'];
+            }
 
-            $_img->thumb(500, 500);
-            $_img->out();
+            $img = new ImageHelper($this->path);
+
+            //裁剪图片
+            $img->resize($Dir, $this->dstWight, $this->dstHeight);
+
+            //上传图片
+            $img->uploadToRemoteFileServer($this->path, 'http://upload.ivideohome.com:8080/upload/upload', $this->id);
+
+
 
 //            Yii::$app->db->createCommand()->insert('pic_info', [
 //                'name' => $this->imageFile->baseName,

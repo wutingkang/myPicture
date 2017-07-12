@@ -12,9 +12,9 @@ use yii\helpers\ArrayHelper;
 
     <?= $form->field($model, 'type')->dropDownList(ArrayHelper::map($typeData,'id', 'name')) ?>
 
-    <?= $form->field($model, 'wight')->textInput() ?>
+    <?= $form->field($model, 'dstWight')->textInput() ?>
 
-    <?= $form->field($model, 'height')->textInput() ?>
+    <?= $form->field($model, 'dstHeight')->textInput() ?>
 
     <p><?= Html::submitButton('Upload', ['class' => 'btn btn-primary']) ?></p>
 

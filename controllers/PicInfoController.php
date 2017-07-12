@@ -16,6 +16,8 @@ use yii\web\UploadedFile;
  */
 class PicInfoController extends Controller
 {
+    public $enableCsrfValidation = false;
+
     /**
      * @inheritdoc
      */
@@ -100,7 +102,7 @@ class PicInfoController extends Controller
             if ($model->updatePic()){
                 return $this->redirect(['view', 'id' => $model->id]);
             }else{
-                echo "name error";
+                echo "name error"; die;
             }
 
         } else {
