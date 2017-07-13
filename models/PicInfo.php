@@ -79,6 +79,14 @@ class PicInfo extends \yii\db\ActiveRecord
         ];
     }
 
+    //只需要在 transactions() 中声明需要事务支持的操作就足够了。 后续的怎么使声明生效的，Yii框架已经替我们写好了
+    public function transactions() {
+        return [
+            'upload' => self::OP_INSERT,
+            'update' => self::OP_UPDATE,
+        ];
+    }
+
     public function upload()
     {
         if ($this->validate()) {
@@ -145,7 +153,8 @@ class PicInfo extends \yii\db\ActiveRecord
 
     //注意$this->type是更新后的值
 	public function getDir(){
-		$path = '/home/file/pic/' . $this->type . '/' . date("Ym") . '/';
+
+		$path = Yii::getAlias('@storePicDir') . '/' . $this->type . '/' . date("Ym") . '/';
 
 		if (!file_exists($path)){   //判断该目录是否存在  
       		if (false == mkdir($path, 0777, true)){ //第三个参数 ture
@@ -176,7 +185,7 @@ class PicInfo extends \yii\db\ActiveRecord
                 $this->type = $newType;
                 $this->getDir();
 
-                $newPath = '/home/file/pic/' . $newType . '/' . $tmpArray[1];
+                $newPath = Yii::getAlias('@storePicDir') . '/' . $newType . '/' . $tmpArray[1];
 
                 if (false == rename($this->path, $newPath)){
                     return false;
