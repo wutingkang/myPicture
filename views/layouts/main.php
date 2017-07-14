@@ -37,8 +37,10 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
-            ['label' => '查看我的图片', 'url' => ['pic-info/index']],
-            ['label' => '上传图片', 'url' => ['pic-info/upload']],
+            ['label'=>'图片管理','items'=>[
+                ['label' => '查看我的图片', 'url' => ['pic-info/index']],
+                ['label' => '上传图片', 'url' => ['pic-info/upload']],
+            ]],
             ['label' => '图片类型管理', 'url' => ['pic-type/index']],
             Yii::$app->user->isGuest ? (
                 ['label' => 'Login', 'url' => ['/site/login']]

@@ -45,7 +45,7 @@ class PicTypeSearch extends PicType
 
         // add conditions that should always apply here
 
-        $query->having("id != :defaultId", array(":defaultId" => 0)); //隐藏默认分类，防止被用户编辑
+        //$query->having("id != :defaultId", array(":defaultId" => 0)); //不隐藏默认分类
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
