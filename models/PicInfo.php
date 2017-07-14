@@ -113,13 +113,13 @@ class PicInfo extends \yii\db\ActiveRecord
 
 
 
-            if ('' == Yii::$app->request->post('PicInfo')['dstWight']){ //不填写view中的form，返回‘’，使用isset返回true
+            if ('' === Yii::$app->request->post('PicInfo')['dstWight']){ //不填写view中的form，返回‘’，使用isset返回true
                 $this->dstWight = 800;
             }else{
                 $this->dstWight = Yii::$app->request->post('PicInfo')['dstWight'];
             }
 
-            if ('' == Yii::$app->request->post('PicInfo')['dstHeight']){
+            if ('' === Yii::$app->request->post('PicInfo')['dstHeight']){
                 $this->dstHeight = 450;
             }else{
                 $this->dstHeight = Yii::$app->request->post('PicInfo')['dstHeight'];
@@ -157,7 +157,7 @@ class PicInfo extends \yii\db\ActiveRecord
 		$path = Yii::getAlias('@storePicDir') . '/' . $this->type . '/' . date("Ym") . '/';
 
 		if (!file_exists($path)){   //判断该目录是否存在  
-      		if (false == mkdir($path, 0777, true)){ //第三个参数 ture
+      		if (false === mkdir($path, 0777, true)){ //第三个参数 ture
 				die('make file save path :' . $path . 'fail!');
 			}
         }
@@ -187,7 +187,7 @@ class PicInfo extends \yii\db\ActiveRecord
 
                 $newPath = Yii::getAlias('@storePicDir') . '/' . $newType . '/' . $tmpArray[1];
 
-                if (false == rename($this->path, $newPath)){
+                if (false === rename($this->path, $newPath)){
                     return false;
                 }
 

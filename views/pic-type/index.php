@@ -33,9 +33,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($model) {
 
                     if (array_key_exists($model->id, $model->numOfPic)){
-                        return Html::a($model->numOfPic[$model->id],"/order?id={$model->id}", ['target'=> '_blank']);
+                        return Html::a($model->numOfPic[$model->id],'/index.php?PicInfoSearch[name]=&PicInfoSearch[type]=' . $model->id . '&r=pic-info/index', ['target'=> '_self']);
                     }else{
-                        return Html::a('0',"/order?id={$model->id}", ['target'=> '_blank']);
+                        return Html::a('0','/index.php?r=pic-type/index', ['target'=> '_self']);
                     }
 
                 },
@@ -47,13 +47,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     'delete' => function ($url, $model) {
                         $url = "/index.php?r=pic-type/delete&id=" . $model->id;
 
-                        if (0 == $model->id){
+                        if (0 === $model->id){
                             return Html::a('<span class="glyphicon glyphicon-trash"></span>',  '/index.php?r=pic-type/index', ['title' => 'delete', //'target' => '_self',
                                 'data' => [
                                     'confirm' => '默认分类，不能删除!',
                                     'method' => 'post',
                                 ]]);
-                        } elseif(array_key_exists($model->id, $model->numOfPic)){ //如何只设置一个按钮?
+                        } elseif(array_key_exists($model->id, $model->numOfPic)){
                             return Html::a('<span class="glyphicon glyphicon-trash"></span>',  '/index.php?r=pic-type/index', ['title' => 'delete', //'target' => '_self',
                                 'data' => [
                                 'confirm' => '该类型下存在已上传的图片，不能删除!',
