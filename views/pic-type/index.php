@@ -35,7 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     if (array_key_exists($model->id, $model->numOfPic)){
                         return Html::a($model->numOfPic[$model->id],'/index.php?PicInfoSearch[name]=&PicInfoSearch[type]=' . $model->id . '&r=pic-info/index', ['target'=> '_self']);
                     }else{
-                        return Html::a('0','/index.php?r=pic-type/index', ['target'=> '_self']);
+                        return Html::a('0', Url::to(['pic-type/index']), ['target'=> '_self']);
                     }
 
                 },
@@ -45,22 +45,21 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\ActionColumn',
                 'buttons' => [
                     'delete' => function ($url, $model) {
-                        $url = "/index.php?r=pic-type/delete&id=" . $model->id;
 
                         if (0 === $model->id){
-                            return Html::a('<span class="glyphicon glyphicon-trash"></span>',  '/index.php?r=pic-type/index', ['title' => 'delete', //'target' => '_self',
+                            return Html::a('<span class="glyphicon glyphicon-trash"></span>',  Url::to(['pic-type/index']), ['title' => 'delete', //'target' => '_self',
                                 'data' => [
                                     'confirm' => '默认分类，不能删除!',
                                     'method' => 'post',
                                 ]]);
                         } elseif(array_key_exists($model->id, $model->numOfPic)){
-                            return Html::a('<span class="glyphicon glyphicon-trash"></span>',  '/index.php?r=pic-type/index', ['title' => 'delete', //'target' => '_self',
+                            return Html::a('<span class="glyphicon glyphicon-trash"></span>',  Url::to(['pic-type/index']), ['title' => 'delete', //'target' => '_self',
                                 'data' => [
                                 'confirm' => '该类型下存在已上传的图片，不能删除!',
                                 'method' => 'post',
                             ]]);
                         }else{
-                            return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, ['title' => 'delete', 'target' => '_self', //'class' => 'btn btn-danger',
+                            return Html::a('<span class="glyphicon glyphicon-trash"></span>', Url::to(['pic-type/delete', 'id' => $model->id]), ['title' => 'delete', 'target' => '_self', //'class' => 'btn btn-danger',
                                 'data' => [
                                     'confirm' => 'Are you sure you want to delete this item?',
                                     'method' => 'post',
@@ -72,13 +71,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     'update' => function ($url, $model) {
 
                         if (0 == $model->id){
-                            return Html::a('<span class="glyphicon glyphicon-pencil"></span>',  '/index.php?r=pic-type/index', ['title' => 'delete', //'target' => '_self',
+                            return Html::a('<span class="glyphicon glyphicon-pencil"></span>',  Url::to(['pic-type/index']), ['title' => 'delete', //'target' => '_self',
                                 'data' => [
                                     'confirm' => '默认分类，不能编辑!',
                                     'method' => 'post',
                                 ]]);
                         }else{
-                            return Html::a('<span class="glyphicon glyphicon-pencil"></span>', "/index.php?r=pic-type/update&id=" . $model->id, ['title' => 'update', //'target' => '_self', //'class' => 'btn btn-danger',
+                            return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Url::to(['pic-type/update', 'id' => $model->id]), ['title' => 'update', //'target' => '_self', //'class' => 'btn btn-danger',
                                 'data' => [
                                     'method' => 'post',
                                 ]
