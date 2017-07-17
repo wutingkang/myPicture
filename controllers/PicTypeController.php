@@ -5,7 +5,6 @@ namespace app\controllers;
 use app\models\PicInfo;
 use Yii;
 use app\models\PicType;
-use app\models\PicTypeSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -36,7 +35,7 @@ class PicTypeController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new PicTypeSearch();
+        $searchModel = new PicType();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -65,9 +64,7 @@ class PicTypeController extends Controller
     public function actionCreate()
     {
         $model = new PicType();
-
-        //auto add id
-
+        $model->setScenario('create');
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);

@@ -57,7 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'type',
                 'label' => '图片类型',
                 'value' => function($model) {
-                    return  PicType::get_type_text($model->type);
+                    return  PicType::getTypeName($model->type);
                 },
             ],
         ],

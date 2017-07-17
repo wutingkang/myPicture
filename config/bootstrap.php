@@ -1,2 +1,2 @@
 <?php
-Yii::setAlias('@storePicDir', '/home/file/pic');
+//Yii::setAlias('@storePicDir', '/home/file/pic');

@@ -6,9 +6,10 @@
  * Time: 5:34 AM
  */
 
-namespace app\models;
+namespace app\components;
 
 //图像处理类
+// need php have GD library
 
 class ImageHelper
 {
@@ -18,17 +19,12 @@ class ImageHelper
     private $type;    //图片类型
     private $img;    //原图的资源句柄
 
-    //构造方法，初始化
+    //构造方法，初始化, 使用前一定要确保文件存在
     public function __construct($_file)
     {
         $this->file = $_file;
-        //判断文件是否存在
-        if (file_exists($this->file)){
-            list($this->width, $this->height, $this->type) = getimagesize($this->file);
-            $this->img = $this->getFromImg($this->file, $this->type);
-        }else{
-            die('文件是不存在');
-        }
+        list($this->width, $this->height, $this->type) = getimagesize($this->file);
+        $this->img = $this->getFromImg($this->file, $this->type);
     }
 
     //加载图片，各种类型，返回图片的资源句柄
@@ -37,19 +33,13 @@ class ImageHelper
         $img = '';
         switch ($_type) {
             case IMAGETYPE_GIF :
-                if (function_exists("imagecreatefromgif")) {
-                    $img = imagecreatefromgif($_file);
-                }
+                $img = imagecreatefromgif($_file);
                 break;
             case IMAGETYPE_JPEG :
-                if (function_exists("imagecreatefromjpeg")) {
-                    $img = imagecreatefromjpeg($_file);
-                }
+                $img = imagecreatefromjpeg($_file);
                 break;
             case IMAGETYPE_PNG :
-                if (function_exists("imagecreatefrompng")) {
-                    $img = imagecreatefrompng($_file);
-                }
+                $img = imagecreatefrompng($_file);
                 break;
             default:
                 break;
@@ -68,8 +58,8 @@ class ImageHelper
     {
         //判断该目录是否存在,不存在则创建
         if (!file_exists($dstDir)) {
-            if (false == mkdir($dstDir, 0777, true)) { //第三个参数 ture
-                die('make file save path :' . $dstDir . 'fail!');
+            if (false === mkdir($dstDir, 0777, true)) { //第三个参数 ture
+                return false;
             }
         }
 
@@ -89,19 +79,13 @@ class ImageHelper
 
         switch ($this->type) {
             case IMAGETYPE_JPEG :
-                if (function_exists('imagejpeg')) {
-                    imagejpeg($newImage, $dstPic, 100); // 存储图像
-                }
+                imagejpeg($newImage, $dstPic, 100); // 存储图像
                 break;
             case IMAGETYPE_PNG :
-                if (function_exists('imagepng')) {
-                    imagepng($newImage, $dstPic, 100);
-                }
+                imagepng($newImage, $dstPic, 100);
                 break;
             case IMAGETYPE_GIF :
-                if (function_exists('imagegif')) {
-                    imagegif($newImage, $dstPic);
-                }
+                imagegif($newImage, $dstPic);
                 break;
             default:
                 break;
@@ -119,6 +103,7 @@ class ImageHelper
 
     /*
      * 上传到远端文件服务器
+     * @return string $result
      * */
     public function uploadToRemoteFileServer($filePath, $uploadUrl, $id){
 
@@ -144,33 +129,6 @@ class ImageHelper
         $result = curl_exec($ch);
         curl_close($ch);
 
-
-
-        if($resultArray = json_decode($result, true)){
-
-            if (0 == $resultArray['status']){
-
-                \Yii::$app->db->createCommand()->update('pic_info',
-                    array(
-                        'downloadUrl' => $resultArray['data']['key'],
-                    ),
-                    'id=:id',
-                    array(':id'=>$id)
-                )->execute();
-
-            }elseif(1000 == $resultArray['status']){
-                die('参数错误');
-            }elseif(2001 == $resultArray['status']){
-                die('服务器出错');
-            }elseif(1001 == $resultArray['status']){
-                die('上传失败');
-            }else{
-                die('unknow status error');
-            }
-
-        }else{
-            die('json_decode() error');
-        }
+        return $result;
     }
-
 }

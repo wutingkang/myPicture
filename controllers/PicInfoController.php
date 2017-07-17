@@ -4,7 +4,6 @@ namespace app\controllers;
 
 use Yii;
 use app\models\PicInfo;
-use app\models\PicInfoSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -66,7 +65,7 @@ class PicInfoController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new PicInfoSearch();
+        $searchModel = new PicInfo();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [

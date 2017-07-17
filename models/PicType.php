@@ -4,6 +4,8 @@ namespace app\models;
 
 use Yii;
 use yii\helpers\ArrayHelper;
+use yii\base\Model;
+use yii\data\ActiveDataProvider;
 
 /**
  * This is the model class for table "pic_type".
@@ -30,9 +32,10 @@ class PicType extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name'], 'required'],
-            [['id', 'name'], 'unique'],
+            [['id'], 'integer'],
             [['name'], 'string', 'max' => 255],
+            [['name'], 'unique' ,'on' => 'create'],
+            [['name'], 'required' ,'on' => 'create'],
         ];
     }
 
@@ -47,7 +50,23 @@ class PicType extends \yii\db\ActiveRecord
         ];
     }
 
-    //return 每种图片类型对应图片数目的数组
+//    /**
+//     * @inheritdoc
+//     */
+//    public function scenarios()
+//    {
+//        $parent_scenarios = parent::scenarios();//继承父类的场景
+//
+//        $self_scenarios = [
+//            'create' => ['name', 'id'],
+//        ];
+//
+//        return array_merge($parent_scenarios, $self_scenarios); //合并场景
+//    }
+
+    /**
+     * return 每种图片类型对应图片数目的数组
+     */
     public function getNumOfPic(){
 
         if (!isset($this->_numOfPic)){
@@ -66,22 +85,62 @@ class PicType extends \yii\db\ActiveRecord
 
     /**
      * 将栏目组合成key-value形式
+     *  @return array[id => name]
      */
-    public static  function  get_type(){
-        $cat = PicType::find()->all();
-        $cat = ArrayHelper::map($cat, 'id', 'name');
-        return $cat;
+    public static  function  getTypes(){
+        $types = PicType::find()->all();
+        $types = ArrayHelper::map($types, 'id', 'name');
+        return $types;
     }
 
     /**
      * 通过栏目id获得栏目名称
-     * @param unknown $id
-     * @return
+     * @param  $id
+     * @return string $name
      */
+    public static  function  getTypeName($id){
+        $types = PicType::find()->all();
+        $types = ArrayHelper::map($types, 'id', 'name');
+        return  $types[$id];
+    }
 
-    public static  function  get_type_text($id){
-        $datas = PicType::find()->all();
-        $datas = ArrayHelper::map($datas, 'id', 'name');
-        return  $datas[$id];
+    /**
+     * Creates data provider instance with search query applied
+     *
+     * @param array $params
+     *
+     * @return ActiveDataProvider
+     */
+    public function search($params)
+    {
+        $query = PicType::find();
+
+        // add conditions that should always apply here
+
+        //$query->having("id != :defaultId", array(":defaultId" => 0)); //不隐藏默认分类
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pagesize' => 8
+            ]
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'id' => $this->id,
+        ]);
+
+        $query->andFilterWhere(['like', 'name', $this->name]);
+
+        return $dataProvider;
     }
 }

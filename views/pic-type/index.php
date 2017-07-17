@@ -71,7 +71,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'update' => function ($url, $model) {
 
                         if (0 == $model->id){
-                            return Html::a('<span class="glyphicon glyphicon-pencil"></span>',  Url::to(['pic-type/index']), ['title' => 'delete', //'target' => '_self',
+                            return Html::a('<span class="glyphicon glyphicon-pencil"></span>',  Url::to(['pic-type/index']), ['title' => 'update', //'target' => '_self',
                                 'data' => [
                                     'confirm' => '默认分类，不能编辑!',
                                     'method' => 'post',

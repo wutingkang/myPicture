@@ -45,9 +45,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'type',
                 'label' => '图片类型',
                 'value' => function($model) {
-                    return  PicType::get_type_text($model->type);
+                    return  PicType::getTypeName($model->type);
                 },
-                'filter' => PicType::get_type(),
+                'filter' => PicType::getTypes(),
             ],
 
             ['class' => 'yii\grid\ActionColumn'], //有个问题：如果是从site控制器打开图片列表，则 view，update，delete三个按钮的动作的默认控制器都是site，这样会出错。
